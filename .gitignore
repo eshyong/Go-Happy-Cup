@@ -10,4 +10,3 @@ error_log
 config.php
 test*
 club-members*.php
-club-sync-aga-ratings.php
