@@ -1,0 +1,13 @@
+*.png
+*.jpg
+*.gif
+*.pdf
+*.sql
+error_log
+*.shtml
+*-register.php
+*.swp
+config.php
+test*
+club-members*.php
+club-sync-aga-ratings.php
