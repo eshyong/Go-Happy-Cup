@@ -3,7 +3,7 @@
 require('config.php');
 $id=$_GET["id"];
 
-$con = mysql_connect(MYSQL_HOST,MYSQL_USER,MYSQL_PW);
+$con = mysql_connect(MYSQL_HOST, MYSQL_USER, MYSQL_PW);
 if (!$con) {
   die('Could not connect: ' . mysql_error());
 }

@@ -8,7 +8,7 @@ if (phpversion() >= "5.1.0") {
 }
 $today_date = strftime("%Y-%m-%d", strtotime("today"));
 
-$con = mysql_connect(MYSQL_HOST,MYSQL_USER,MYSQL_PW);
+$con = mysql_connect(MYSQL_HOST, MYSQL_USER, MYSQL_PW);
 if (!$con) {
   die('Could not connect: ' . mysql_error());
 }

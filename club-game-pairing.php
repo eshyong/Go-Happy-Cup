@@ -185,7 +185,7 @@ function changeBoardSize(boardsize_combo_box, id) {
 	 <td valign="top" width="99%">
 
 <?php
-$con = mysql_connect(MYSQL_HOST,MYSQL_USER,MYSQL_PW);
+$con = mysql_connect(MYSQL_HOST, MYSQL_USER, MYSQL_PW);
 if (!$con) {
 	die('Could not connect: ' . mysql_error());
 }

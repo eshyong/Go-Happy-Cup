@@ -3,7 +3,7 @@
 require('config.php');
 function print_active_games($con) {
 	if (is_null($con)) {
-		$con = mysql_connect(MYSQL_HOST,MYSQL_USER,MYSQL_PW);
+		$con = mysql_connect(MYSQL_HOST, MYSQL_USER, MYSQL_PW);
 		if (!$con) {
 			die('Could not connect: ' . mysql_error());
 		}

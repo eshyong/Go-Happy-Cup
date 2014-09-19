@@ -65,7 +65,7 @@
 
 <?php
 require('config.php');
-$con = mysql_connect(MYSQL_HOST,MYSQL_USER,MYSQL_PW);
+$con = mysql_connect(MYSQL_HOST, MYSQL_USER, MYSQL_PW);
 $member_table = "members";
 if (!$con) {
 	die('Could not connect: ' . mysql_error());

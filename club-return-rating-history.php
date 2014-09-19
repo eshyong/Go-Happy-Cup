@@ -4,7 +4,7 @@ require('config.php');
 function print_rating_history($con, $members_tb, $ratings_tb, $id, $date,
 							$limit = -1, $count_games = 1) {
 	if (is_null($con)) {
-		$con = mysql_connect(MYSQL_HOST,MYSQL_USER,MYSQL_PW);
+		$con = mysql_connect(MYSQL_HOST, MYSQL_USER, MYSQL_PW);
 		if (!$con) {
 			die('Could not connect: ' . mysql_error());
 		}

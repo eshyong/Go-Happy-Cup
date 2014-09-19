@@ -9,7 +9,7 @@ $regdate=$_GET["regdate"];
 
 //echo "id=$id<br>\ncheckin=$checkin<br>\nregdate=$regdate<br>\n";
 
-$con = mysql_connect(MYSQL_HOST,MYSQL_USER,MYSQL_PW);
+$con = mysql_connect(MYSQL_HOST, MYSQL_USER, MYSQL_PW);
 if (!$con)
   {
   die('Could not connect: ' . mysql_error());

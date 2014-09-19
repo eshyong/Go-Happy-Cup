@@ -12,7 +12,7 @@ $komi=$_GET["komi"];
 $winner=$_GET["winner"];
 $date=$_GET["date"];
 
-$con = mysql_connect(MYSQL_HOST,MYSQL_USER,MYSQL_PW);
+$con = mysql_connect(MYSQL_HOST, MYSQL_USER, MYSQL_PW);
 if (!$con)
   {
   die('Could not connect: ' . mysql_error());

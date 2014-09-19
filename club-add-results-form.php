@@ -36,7 +36,7 @@ function setStartTimeNow() {
 	 <?php include('club-results-of-id.php'); ?>
 	 <?php
 require ('config.php');
-	 $con = mysql_connect(MYSQL_HOST,MYSQL_USER,MYSQL_PW);
+	 $con = mysql_connect(MYSQL_HOST, MYSQL_USER, MYSQL_PW);
 $members_tb = "members";
 $results_tb = "results";
 if (!$con) {

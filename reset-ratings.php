@@ -26,7 +26,7 @@ function update_one($id, $rank) {
 // update every rating in the members table to be the latest rating in the ratings table
 function main() {
 	/* connect to database */
-	$con = mysql_connect(MYSQL_HOST,MYSQL_USER,MYSQL_PW);
+	$con = mysql_connect(MYSQL_HOST, MYSQL_USER, MYSQL_PW);
 	if (!$con) {
 		die('Could not connect: ' . mysql_error());
 	}

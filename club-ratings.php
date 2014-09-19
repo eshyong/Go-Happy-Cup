@@ -15,7 +15,7 @@ function get_rating($up_to_date) {
 	$ratings_file_name = "/tmp/gohappycup.com-ratings.txt";
 
 	/* connect to database */
-	$con = mysql_connect(MYSQL_HOST,MYSQL_USER,MYSQL_PW);
+	$con = mysql_connect(MYSQL_HOST, MYSQL_USER, MYSQL_PW);
 	if (!$con) {
 		die('Could not connect: ' . mysql_error());
 	}

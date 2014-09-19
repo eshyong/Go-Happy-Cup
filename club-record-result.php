@@ -4,7 +4,7 @@ require('config.php');
 $id=$_GET["id"];
 $white_win=$_GET["white_win"];
 
-$con = mysql_connect(MYSQL_HOST,MYSQL_USER,MYSQL_PW);
+$con = mysql_connect(MYSQL_HOST, MYSQL_USER, MYSQL_PW);
 if (!$con) {
   die('Could not connect: ' . mysql_error());
 }
