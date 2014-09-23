@@ -7,11 +7,6 @@
 	 <script language="JavaScript">
 	function reg_member(box, id)
 	{
-		//if (box.checked)
-		// 	window.alert(id + " checked");
-		//else
-		// 	window.alert(id + " unchecked");
-
 		xmlhttp=GetXmlHttpObject();
 		if (xmlhttp==null)
 		{
@@ -43,6 +38,26 @@
 		xmlhttp.send(null);
 	}
 
+    function toggleTables(box) {
+        // Toggle visibility of the all member table or active member table.
+        var allMembers = document.getElementById("all member table");
+        var activeMembers = document.getElementById("active member table");
+        var allCount = document.getElementById("all member count");
+        var activeCount = document.getElementById("active member count");
+
+        if (box.checked) {
+            allMembers.style.display = "table";
+            allCount.style.display = "";
+            activeMembers.style.display = "none";
+            activeCount.style.display = "none";
+        } else {
+            allMembers.style.display = "none";
+            allCount.style.display = "none";
+            activeMembers.style.display = "table";
+            activeCount.style.display = "";
+        }
+    }
+
 	function stateChanged()
 	{
 		if (xmlhttp.readyState==4) {
@@ -66,73 +81,93 @@
 <?php
 require('config.php');
 $con = mysql_connect(MYSQL_HOST, MYSQL_USER, MYSQL_PW);
-$member_table = "members";
 if (!$con) {
 	die('Could not connect: ' . mysql_error());
 }
-
-mysql_select_db(MYSQL_DB, $con);
-
-$result = mysql_query("SELECT * FROM $member_table ORDER BY rank DESC, name ASC");
-
-$result_name_order = mysql_query(
-	"SELECT id, name, rank, regdate FROM $member_table ORDER BY name ASC");
-
-echo "<p>Please mark your name below so that we know you are here today.</p>\n";
-
-echo "<div id=\"debug\"></div>\n";
-
-$num_members = mysql_num_rows($result);
-echo "<p>Total members: $num_members</p>\n";
-
-$num_col = 3;
-$num_members_per_col = $num_members / $num_col;
 
 if (phpversion() >= "5.1.0") {
 	date_default_timezone_set('America/Los_Angeles');
 }
 
-echo "<table>
-<tr>";
+mysql_select_db(MYSQL_DB, $con);
 
-$n = 0;
+// Find a way to hide the HTML this query returns, if a checkbox is clicked.
+
+$active_members = mysql_query("SELECT id, name, rank, regdate 
+                                    FROM members
+                                    WHERE regdate >= date_sub(curdate(), INTERVAL 1 YEAR)
+                                    ORDER BY name ASC");
+$all_members = mysql_query("SELECT * FROM members ORDER BY rank DESC, name ASC");
+$num_active_members = mysql_num_rows($active_members);
+$num_all_members = mysql_num_rows($all_members);
+
+echo "<p>Please mark your name below so that we know you are here today.</p>\n";
+
+// echo "<div id=\"debug\"></div>\n";
+
+echo "Show all members: <input id=\"show all\" type=checkbox onclick=\"toggleTables(this)\"><br>\n"
+   . "<p id=\"active member count\" style=\"\">Active members: $num_active_members</p>\n"
+   . "<p id=\"all member count\" style=\"display:none\">Total members: $num_all_members</p><br>\n";
+
+// Split tables into three main columns.
+$num_col = 3;
+$num_active_members_per_col = $num_active_members / $num_col;
+$num_all_members_per_col = $num_all_members / $num_col;
+
+// Emit the active member table table.
+echo "<table id=\"active member table\" style=\"display:table\">";
 for ($col = 0; $col < $num_col; $col++) {
-	echo "<td valign=top>\n";
+	echo "<td valign=top>\n"
+	   . "<table border=1>"
+	   . "<tr><td>Name (Rating)</td>"
+	   . "<td width=30 align=center>I Am Here</td></tr>";
 
-	/* table ordered by name */
-	echo "<table border=1>";
-	echo "<tr><td>Name (Rating)</td>";
-	echo "<td width=30 align=center>I Am Here</td></tr>";
-
-	for ($row = 0; $row < $num_members_per_col; $row++) {
-		if ($n == $num_members) {
-			break;
-		}
-		if ($result = mysql_fetch_array($result_name_order)) {
-			echo "<tr>";
-			echo "<td>" . $result['name'];
-			echo "("; echo rank_str($result['rank']); echo ")";
-			echo "<td align=center><INPUT TYPE=CHECKBOX";
-			if (strtotime($result['regdate']) >= strtotime("today")) {
-				echo " checked";
-			}
-			echo " onclick=\"reg_member(this, " .
-				$result['id'] . ")\"></td>";
-			echo "</tr>\n";
-		}
-		$n++;
+	for ($row = 0; $row < $num_active_members_per_col; $row++) {
+        // Emit tables for the active member table.
+        $result = mysql_fetch_array($active_members);
+        if ($result) {
+            echo "<tr><td>"
+               . $result['name']
+               . "(" . rank_str($result['rank']) . ")"
+               . "<td align=center><input type=checkbox" . " onclick=\"reg_member(this, " . $result['id'] . ")\"></td>"
+               . "</tr>\n";
+        }
 	}
-	echo "</table>\n";
-
-	echo "</td>\n";
+	echo "</table>\n" 
+       . "</td>\n";
 }
 
-echo "</tr>
-    </table>\n";
+// End of "active member table" table.
+echo "</table>\n";
 
-echo "   </td>
-      </tr>
-    </table>\n";
+// Emit the "all member table" table.
+echo "<table id=\"all member table\" style=\"display:none\"><tr>";
+for ($col = 0; $col < $num_col; $col++) {
+	echo "<td valign=top>\n"
+	   . "<table border=1>"
+	   . "<tr><td>Name (Rating)</td>"
+	   . "<td width=30 align=center>I Am Here</td></tr>";
+
+	for ($row = 0; $row < $num_all_members_per_col; $row++) {
+        // Emit tables for the all member table
+        $result = mysql_fetch_array($all_members);
+        if ($result) {
+            echo "<tr><td>"
+               . $result['name']
+               . "(" . rank_str($result['rank']) . ")"
+               . "<td align=center><input type=checkbox" . " onclick=\"reg_member(this, " . $result['id'] . ")\"></td>"
+               . "</tr>\n";
+        }
+	}
+	echo "</table>\n" 
+       . "</td>\n";
+}
+
+// End "all member table" table.
+echo "</tr></table>\n";
+
+// End page format.
+echo "</td></tr></table>\n";
 
 mysql_close($con);
 ?>
