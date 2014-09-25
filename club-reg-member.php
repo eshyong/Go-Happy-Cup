@@ -38,25 +38,33 @@
 		xmlhttp.send(null);
 	}
 
-    function toggleTables(box) {
-        // Toggle visibility of the all member table or active member table.
-        var allMembers = document.getElementById("all member table");
-        var activeMembers = document.getElementById("active member table");
-        var allCount = document.getElementById("all member count");
-        var activeCount = document.getElementById("active member count");
+	function toggleTables(box) 
+	{
+		// Get table and count elements.
+		var allMembers = document.getElementById("all members table");
+		var activeMembers = document.getElementById("active members table");
+		var allCount = document.getElementById("all member count");
+		var activeCount = document.getElementById("active member count");
 
-        if (box.checked) {
-            allMembers.style.display = "table";
-            allCount.style.display = "";
-            activeMembers.style.display = "none";
-            activeCount.style.display = "none";
-        } else {
-            allMembers.style.display = "none";
-            allCount.style.display = "none";
-            activeMembers.style.display = "table";
-            activeCount.style.display = "";
-        }
-    }
+		// style=display:{string}
+		var visible = "";
+		var none = "none";
+		if (box.checked) {
+			// Show "all members" and hide "active members" 
+			allMembers.style.display = visible;
+			allCount.style.display = visible;
+
+			activeMembers.style.display = none;
+			activeCount.style.display = none;
+		} else {
+			// Show "active members" and hide "all members"
+			activeMembers.style.display = visible;
+			activeCount.style.display = visible;
+
+			allMembers.style.display = none;
+			allCount.style.display = none;
+		}
+	}
 
 	function stateChanged()
 	{
@@ -67,14 +75,14 @@
 </script>
   </head>
   <body>
-    <table width="100%">
-      <tr>
+	<table width="100%">
+	  <tr>
 	 	<?php include("header.shtml"); ?>
-      </tr>
-    </table>
+	  </tr>
+	</table>
 
-    <table border="0" width="100%" cellspacing=1 cellpadding=12>
-      <tr>
+	<table border="0" width="100%" cellspacing=1 cellpadding=12>
+	  <tr>
 	 <?php include("left-menu-simpletree.shtml"); ?>
 	 <td valign="top" width="99%">
 
@@ -94,9 +102,9 @@ mysql_select_db(MYSQL_DB, $con);
 // Find a way to hide the HTML this query returns, if a checkbox is clicked.
 
 $active_members = mysql_query("SELECT id, name, rank, regdate 
-                                    FROM members
-                                    WHERE regdate >= date_sub(curdate(), INTERVAL 1 YEAR)
-                                    ORDER BY name ASC");
+				FROM members
+				WHERE regdate >= date_sub(curdate(), INTERVAL 1 YEAR)
+				ORDER BY name ASC");
 $all_members = mysql_query("SELECT * FROM members ORDER BY rank DESC, name ASC");
 $num_active_members = mysql_num_rows($active_members);
 $num_all_members = mysql_num_rows($all_members);
@@ -110,64 +118,13 @@ echo "Show all members: <input id=\"show all\" type=checkbox onclick=\"toggleTab
    . "<p id=\"all member count\" style=\"display:none\">Total members: $num_all_members</p><br>\n";
 
 // Split tables into three main columns.
-$num_col = 3;
-$num_active_members_per_col = $num_active_members / $num_col;
-$num_all_members_per_col = $num_all_members / $num_col;
+$num_cols = 3;
+$num_active_rows = $num_active_members / $num_cols;
+$num_all_rows = $num_all_members / $num_cols;
 
-// Emit the active member table table.
-echo "<table id=\"active member table\" style=\"display:table\">";
-for ($col = 0; $col < $num_col; $col++) {
-	echo "<td valign=top>\n"
-	   . "<table border=1>"
-	   . "<tr><td>Name (Rating)</td>"
-	   . "<td width=30 align=center>I Am Here</td></tr>";
-
-	for ($row = 0; $row < $num_active_members_per_col; $row++) {
-        // Emit tables for the active member table.
-        $result = mysql_fetch_array($active_members);
-        if ($result) {
-            echo "<tr><td>"
-               . $result['name']
-               . "(" . rank_str($result['rank']) . ")"
-               . "<td align=center><input type=checkbox" . " onclick=\"reg_member(this, " . $result['id'] . ")\"></td>"
-               . "</tr>\n";
-        }
-	}
-	echo "</table>\n" 
-       . "</td>\n";
-}
-
-// End of "active member table" table.
-echo "</table>\n";
-
-// Emit the "all member table" table.
-echo "<table id=\"all member table\" style=\"display:none\"><tr>";
-for ($col = 0; $col < $num_col; $col++) {
-	echo "<td valign=top>\n"
-	   . "<table border=1>"
-	   . "<tr><td>Name (Rating)</td>"
-	   . "<td width=30 align=center>I Am Here</td></tr>";
-
-	for ($row = 0; $row < $num_all_members_per_col; $row++) {
-        // Emit tables for the all member table
-        $result = mysql_fetch_array($all_members);
-        if ($result) {
-            echo "<tr><td>"
-               . $result['name']
-               . "(" . rank_str($result['rank']) . ")"
-               . "<td align=center><input type=checkbox" . " onclick=\"reg_member(this, " . $result['id'] . ")\"></td>"
-               . "</tr>\n";
-        }
-	}
-	echo "</table>\n" 
-       . "</td>\n";
-}
-
-// End "all member table" table.
-echo "</tr></table>\n";
-
-// End page format.
-echo "</td></tr></table>\n";
+// Emit the active members table table.
+emit_member_table($num_active_rows, $num_cols, "active members table", "", $active_members);
+emit_member_table($num_all_rows, $num_cols, "all members table", "none", $all_members);
 
 mysql_close($con);
 ?>
