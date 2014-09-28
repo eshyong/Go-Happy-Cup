@@ -45,5 +45,5 @@ $id = $_GET["id"];
 $members_tb = "members";
 $ratings_tb = "ratings";
 
-print_rating_history($con, $members_tb, $ratings_tb, $id, $date);
+print_rating_history(null, $members_tb, $ratings_tb, $id, $date);
 ?>
