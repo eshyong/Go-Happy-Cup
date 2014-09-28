@@ -3,6 +3,7 @@
 *.gif
 *.pdf
 *.sql
+*.txt
 error_log
 *.shtml
 *-register.php
@@ -10,3 +11,4 @@ error_log
 config.php
 test*
 club-members*.php
+output
