@@ -1,6 +1,6 @@
 <?php include("common-func.php"); ?>
 <?php
-require('config.php');
+require_once('config.php');
 function print_rating_history($con, $members_tb, $ratings_tb, $id, $date,
 							$limit = -1, $count_games = 1) {
 	if (is_null($con)) {

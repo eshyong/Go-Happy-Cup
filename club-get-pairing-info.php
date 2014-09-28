@@ -1,6 +1,6 @@
 <?php include("common-func.php"); ?>
 <?php
-require('config.php');
+require_once('config.php');
 $id=$_GET["id"];
 
 #echo "id=$id<br>\n";

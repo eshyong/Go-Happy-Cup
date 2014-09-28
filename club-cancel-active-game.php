@@ -1,6 +1,6 @@
 <?php include("club-print-active-games.php"); ?>
 <?php
-require('config.php');
+require_once('config.php');
 $id=$_GET["id"];
 
 $con = mysql_connect(MYSQL_HOST, MYSQL_USER, MYSQL_PW);

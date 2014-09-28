@@ -1,6 +1,6 @@
-<?php include("common-func.php"); ?>
+<?php include('common-func.php'); ?>
 <?php
-require('config.php');
+require_once('config.php');
 function print_game_results($con, $members_tb, $results_tb, $id, $date,
 							$limit = -1, $count_games = 1) {
 	if (is_null($con)) {

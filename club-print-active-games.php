@@ -1,6 +1,6 @@
 <?php include("club-results-of-id.php"); ?>
 <?php
-require('config.php');
+require_once('config.php');
 function print_active_games($con) {
 	if (is_null($con)) {
 		$con = mysql_connect(MYSQL_HOST, MYSQL_USER, MYSQL_PW);

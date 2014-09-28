@@ -1,5 +1,5 @@
 <?php
-require('config.php');
+require_once('config.php');
   // calculate club ratings using a python CGI.  Here is how this works:
   // 1. generate players file and results file
   // 2. call python CGI to generate ratings file

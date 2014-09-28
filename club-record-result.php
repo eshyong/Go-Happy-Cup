@@ -1,6 +1,6 @@
 <?php include("club-print-active-games.php"); ?>
 <?php
-require('config.php');
+require_once('config.php');
 $id=$_GET["id"];
 $white_win=$_GET["white_win"];
 

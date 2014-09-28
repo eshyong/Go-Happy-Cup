@@ -1,5 +1,5 @@
 <?php
-require('config.php');
+require_once('config.php');
 $members_tb = "members";
 $results_tb = "results";
 
