@@ -34,8 +34,16 @@ function update_aga_ranks($path) {
     // DB configurations.
     $conn = mysql_connect(MYSQL_HOST, MYSQL_USER, MYSQL_PW);
     mysql_select_db(MYSQL_DB, $conn);
-    $update_query = 'UPDATE members SET rank=$rating WHERE aga_id=$id';
+    $sync_query = 'UPDATE members SET rank=$rank, is_anchor=TRUE WHERE aga_id=$id';
 
+    // Set all members.is_anchor to FALSE, then set only is_anchor of updated AGA members to TRUE.
+    $success = mysql_query('UPDATE members SET is_anchor=FALSE');
+    if (!$success) {
+        $err_string = mysql_error();
+        echo "Error setting anchors: $err_string please check manually.\n";
+        return;
+    }
+    
     $contents = file_get_contents($path);
     if ($contents) {
         // Split contents by line, and leave off last empty item.
@@ -48,14 +56,14 @@ function update_aga_ranks($path) {
             $entry = preg_split("/\t/", $line);
             $name = $entry[0];
             $id = $entry[1];
-            $rating = $entry[3];
+            $rank = $entry[3];
             $expiration = $entry[4];
 
-            // Validate $id and $rating as numbers, and update player rank if aga_id matches.
-            if (is_numeric($id) && is_numeric($rating) && strtotime($expiration) > $today) {
-                $query = str_replace(['$rating', '$id'], [$rating, $id], $update_query);
+            // Validate $id and $rank as numbers, and update player rank if aga_id matches.
+            if (is_numeric($id) && is_numeric($rank) && strtotime($expiration) > $today) {
+                $query = str_replace(['$rank', '$id'], [$rank, $id], $sync_query);
                 $result = mysql_query($query, $conn);
-                echo "name: $name; id: $id; rating: $rating; expiration date: $expiration\n";
+                echo "name: $name; id: $id; rank: $rank; expiration date: $expiration\n";
             }
         }
     }
