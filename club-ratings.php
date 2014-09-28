@@ -21,26 +21,6 @@ function get_rating($up_to_date) {
 	}
 	mysql_select_db(MYSQL_DB, $con);
 
-	$cond1 = "id=1 or id=44";
-	$cond2 = "id=35 or id=180";
-	$sql = "select is_anchor from $members_tb where id = 1";
-	$results = mysql_query($sql);
-	$row = mysql_fetch_array($results);
-	if ($row['is_anchor'] == 1) {
-		echo "Set anchor to 0<br>\n";
-		$sql1 = "UPDATE members SET is_anchor=0 where " . $cond1;
-		$sql2 = "UPDATE members SET is_anchor=1 where " . $cond2;
-	} else {
-		echo "Set anchor to 1<br>\n";
-		$sql1 = "UPDATE members SET is_anchor=1 where " . $cond1;
-		$sql2 = "UPDATE members SET is_anchor=0 where " . $cond2;
-	}
-	flush();
-	echo $sql1, "<br>\n";
-	echo $sql2, "<br>\n";
-	$results = mysql_query($sql1);
-	$results = mysql_query($sql2);
-
 	/* generate players file */
 	/* players file format: id rank is_anchor "name" */
 	$sql = "select id, rank, is_anchor, name from $members_tb";

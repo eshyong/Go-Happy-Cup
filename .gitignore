@@ -12,3 +12,4 @@ config.php
 test*
 club-members*.php
 output
+tmp/*
