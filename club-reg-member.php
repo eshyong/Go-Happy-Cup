@@ -87,7 +87,7 @@
 	 <td valign="top" width="99%">
 
 <?php
-require('config.php');
+require_once('config.php');
 $con = mysql_connect(MYSQL_HOST, MYSQL_USER, MYSQL_PW);
 if (!$con) {
 	die('Could not connect: ' . mysql_error());
@@ -101,13 +101,18 @@ mysql_select_db(MYSQL_DB, $con);
 
 // Find a way to hide the HTML this query returns, if a checkbox is clicked.
 
-$active_members = mysql_query("SELECT id, name, rank, regdate 
-				FROM members
-				WHERE regdate >= date_sub(curdate(), INTERVAL 1 YEAR)
-				ORDER BY name ASC");
-$all_members = mysql_query("SELECT * FROM members ORDER BY rank DESC, name ASC");
+$select_query = "SELECT id, name, rank, regdate FROM members ";
+$date_cond = "WHERE regdate >= date_sub(curdate(), INTERVAL 1 YEAR) ";
+$order = "ORDER BY name ASC, rank DESC";
+
+$active_members = mysql_query($select_query . $date_cond . $order);
+$all_members = mysql_query($select_query . $order);
+
 $num_active_members = mysql_num_rows($active_members);
 $num_all_members = mysql_num_rows($all_members);
+
+// Split tables into three main columns.
+$num_cols = 3;
 
 echo "<p>Please mark your name below so that we know you are here today.</p>\n";
 
@@ -117,14 +122,9 @@ echo "Show all members: <input id=\"show all\" type=checkbox onclick=\"toggleTab
    . "<p id=\"active member count\" style=\"\">Active members: $num_active_members</p>\n"
    . "<p id=\"all member count\" style=\"display:none\">Total members: $num_all_members</p><br>\n";
 
-// Split tables into three main columns.
-$num_cols = 3;
-$num_active_rows = $num_active_members / $num_cols;
-$num_all_rows = $num_all_members / $num_cols;
-
 // Emit the active members table table.
-emit_member_table($num_active_rows, $num_cols, "active members table", "", $active_members);
-emit_member_table($num_all_rows, $num_cols, "all members table", "none", $all_members);
+emit_member_table($num_active_members, $num_cols, "active members table", "", $active_members);
+emit_member_table($num_all_members, $num_cols, "all members table", "none", $all_members);
 
 mysql_close($con);
 ?>
